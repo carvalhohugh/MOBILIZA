@@ -1,0 +1,10 @@
+<svg viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Triângulo Vermelho -->
+  <polygon points="10,50 35,10 60,50" fill="#dc2626" />
+  
+  <!-- Número 33 em branco (dentro do triângulo) -->
+  <text x="35" y="44" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="20" text-anchor="middle">33</text>
+  
+  <!-- Palavra MOBILIZA em preto -->
+  <text x="70" y="44" fill="black" font-family="Arial, sans-serif" font-weight="900" font-size="28" letter-spacing="2">MOBILIZA</text>
+</svg>
