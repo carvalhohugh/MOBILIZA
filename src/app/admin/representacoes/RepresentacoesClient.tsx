@@ -248,7 +248,7 @@ export function RepresentacoesClient() {
 
             <div className="space-y-2">
               <Label>Tipo</Label>
-              <Select value={type} onValueChange={setType}>
+              <Select value={type} onValueChange={(v: any) => v && (v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o tipo" />
                 </SelectTrigger>
@@ -262,7 +262,7 @@ export function RepresentacoesClient() {
 
             <div className="space-y-2">
               <Label>Status</Label>
-              <Select value={status} onValueChange={setStatus}>
+              <Select value={status} onValueChange={(v: any) => v && (v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o status" />
                 </SelectTrigger>
@@ -324,7 +324,7 @@ export function RepresentacoesClient() {
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
+                        <DropdownMenuTrigger>
                           <Button variant="ghost" className="h-8 w-8 p-0">
                             <span className="sr-only">Abrir menu</span>
                             <MoreHorizontal className="h-4 w-4" />

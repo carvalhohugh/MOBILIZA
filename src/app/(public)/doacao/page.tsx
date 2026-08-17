@@ -179,7 +179,7 @@ export default function DoacaoPage() {
               <div className="w-full max-w-md space-y-2">
                 <Label className="text-left block text-neutral-500 uppercase font-bold text-xs">PIX Cópia e Cola</Label>
                 <div className="flex gap-2">
-                  <Input readValue={pixCode} value={pixCode} readOnly className="bg-neutral-100 text-neutral-600 font-mono text-sm" />
+                  <Input defaultValue={pixCode} value={pixCode} readOnly className="bg-neutral-100 text-neutral-600 font-mono text-sm" />
                   <Button onClick={copyPix} className="bg-neutral-900 text-white font-bold hover:bg-neutral-800">COPIAR</Button>
                 </div>
               </div>

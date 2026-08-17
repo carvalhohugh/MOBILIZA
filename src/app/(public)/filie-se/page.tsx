@@ -155,7 +155,7 @@ export default function FilieSeWizard() {
               <span className="font-bold text-neutral-500 uppercase text-xs">Etapa {step} de {totalSteps}</span>
               <span className="font-bold text-red-600 text-sm">{Math.round(progressPercentage)}% Concluído</span>
             </div>
-            <Progress value={progressPercentage} className="h-2 bg-neutral-200" indicatorClassName="bg-red-600" />
+            <Progress value={progressPercentage} className="w-full h-2 mb-6" />
             <div className="flex justify-end mt-2">
               <span className="text-xs text-neutral-400 font-medium">Protocolo: {protocol} (Auto-salvamento ativo)</span>
             </div>

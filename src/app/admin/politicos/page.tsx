@@ -117,7 +117,7 @@ export default function PoliticosPage() {
 
             <div className="space-y-2">
               <Label>Cargo</Label>
-              <Select value={role} onValueChange={setRole}>
+              <Select value={role} onValueChange={(v: any) => v && (v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {ROLES.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
@@ -187,7 +187,7 @@ export default function PoliticosPage() {
                     <TableCell>{pol.last_election_votes?.toLocaleString('pt-BR') || '---'}</TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
+                        <DropdownMenuTrigger>
                           <Button variant="ghost" className="h-8 w-8 p-0">
                             <span className="sr-only">Abrir menu</span>
                             <MoreHorizontal className="h-4 w-4" />

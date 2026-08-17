@@ -87,7 +87,7 @@ Seja conciso, profissional e persuasivo. Não use blocos de código (markdown de
         </div>
         <div className="flex gap-2 mt-4 md:mt-0 items-center">
           <MapPin className="text-muted-foreground w-4 h-4" />
-          <Select value={region} onValueChange={setRegion}>
+          <Select value={region} onValueChange={(v: any) => v && setRegion(v)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Selecione a Região" />
             </SelectTrigger>

@@ -78,7 +78,7 @@ export default function DiretoriosPage() {
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} /> Atualizar
           </Button>
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
+            <DialogTrigger>
               <Button className="bg-red-600 hover:bg-red-700">
                 <Plus className="w-4 h-4 mr-2" /> Novo Diretório
               </Button>
@@ -90,7 +90,7 @@ export default function DiretoriosPage() {
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Nível Hierárquico</label>
-                  <Select value={level} onValueChange={setLevel}>
+                  <Select value={level} onValueChange={(v: any) => v && setLevel(v)}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="NACIONAL">Nacional</SelectItem>
