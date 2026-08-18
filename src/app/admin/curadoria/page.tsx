@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, CheckCircle, Edit3, Image as ImageIcon } from "lucide-react";
+import { RefreshCw, CheckCircle, Edit3, Image as ImageIcon, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -133,6 +133,50 @@ export default function CuradoriaPage() {
     setPublishingId(null);
   };
 
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+
+  const handleAskAI = async () => {
+    setIsGeneratingAI(true);
+    try {
+      const prompt = `Atue como um jornalista profissional de portal de notícias. Reescreva a seguinte notícia de forma clara, objetiva e atrativa. Mantenha os fatos essenciais.
+A resposta DEVE ter estritamente o formato abaixo:
+TÍTULO: [O novo título da notícia]
+CONTEÚDO: [O texto reescrito formatado em HTML básico com tags <p>, <strong>, etc]
+
+Notícia original:
+Título: ${editTitle}
+Texto: ${editContent.substring(0, 3000)}`;
+
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+      const text = data.text || '';
+      const titleMatch = text.match(/TÍTULO:\s*([^\n]*)/i);
+      const contentMatch = text.match(/CONTEÚDO:\s*([\s\S]*)/i);
+
+      if (titleMatch && titleMatch[1]) {
+        setEditTitle(titleMatch[1].replace(/\*\*/g, '').trim());
+      }
+      if (contentMatch && contentMatch[1]) {
+        let newContent = contentMatch[1].trim();
+        newContent = newContent.replace(/```html/gi, '').replace(/```/g, '').trim();
+        setEditContent(newContent);
+      } else {
+        setEditContent(text.replace(/```html/gi, '').replace(/```/g, '').trim());
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert("Erro ao gerar com IA: " + err.message);
+    }
+    setIsGeneratingAI(false);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -224,6 +268,19 @@ export default function CuradoriaPage() {
             <DialogTitle>Reescrever Notícia</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-blue-50 text-blue-900 p-4 rounded-md border border-blue-100 mb-2 gap-4">
+              <div className="text-sm">
+                <strong>IA Integrada:</strong> Você pode usar a Inteligência Artificial para reescrever a notícia inteira instantaneamente num formato mais profissional.
+              </div>
+              <Button 
+                onClick={handleAskAI} 
+                disabled={isGeneratingAI}
+                className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
+              >
+                {isGeneratingAI ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+                {isGeneratingAI ? 'Reescrevendo...' : 'Reescrever com IA'}
+              </Button>
+            </div>
             <div className="space-y-2">
               <Label>Título</Label>
               <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
