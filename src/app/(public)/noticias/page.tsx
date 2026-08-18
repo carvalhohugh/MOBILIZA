@@ -33,10 +33,10 @@ export default async function NoticiasPage() {
             {news.map((item) => (
               <div key={item.id} className="bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col hover:shadow-md transition-shadow">
                 {item.cover_image && (
-                  <div className="h-48 w-full bg-neutral-200 overflow-hidden relative">
+                  <Link href={`/noticias/${item.slug}`} className="h-48 w-full bg-neutral-200 overflow-hidden relative block">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={item.cover_image} alt={item.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                  </div>
+                  </Link>
                 )}
                 
                 <div className="p-6 flex flex-col flex-1">
@@ -51,9 +51,11 @@ export default async function NoticiasPage() {
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-neutral-900 mb-3 line-clamp-2 leading-tight">
-                    {item.title}
-                  </h3>
+                  <Link href={`/noticias/${item.slug}`}>
+                    <h3 className="text-xl font-bold text-neutral-900 mb-3 line-clamp-2 leading-tight hover:text-red-600 transition-colors">
+                      {item.title}
+                    </h3>
+                  </Link>
                   
                   {/* Simplistic excerpt extraction by removing HTML tags from content */}
                   <p className="text-neutral-600 line-clamp-3 mb-6 text-sm flex-1"
