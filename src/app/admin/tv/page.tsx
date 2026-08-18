@@ -32,7 +32,8 @@ export default function AdminTVPage() {
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  const handleAdd = async () => {
+  const handleAdd = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!newTitle || !newUrl) return;
 
     const ytId = extractYouTubeId(newUrl);
@@ -78,19 +79,19 @@ export default function AdminTVPage() {
           <CardDescription>Insira o título e a URL do vídeo do YouTube.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 items-end">
+          <form onSubmit={handleAdd} className="flex flex-col md:flex-row gap-4 items-end">
             <div className="space-y-2 flex-1">
               <label className="text-sm font-medium">Título do Vídeo</label>
-              <Input placeholder="Ex: Sessão Plenária 24/05" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
+              <Input placeholder="Ex: Sessão Plenária 24/05" value={newTitle} onChange={e => setNewTitle(e.target.value)} required />
             </div>
             <div className="space-y-2 flex-[2]">
               <label className="text-sm font-medium">Link do YouTube</label>
-              <Input placeholder="Ex: https://www.youtube.com/watch?v=XXXXXXX" value={newUrl} onChange={e => setNewUrl(e.target.value)} />
+              <Input placeholder="Ex: https://www.youtube.com/watch?v=XXXXXXX" value={newUrl} onChange={e => setNewUrl(e.target.value)} required type="url" />
             </div>
-            <Button onClick={handleAdd} className="bg-red-600 hover:bg-red-700">
+            <Button type="submit" className="bg-red-600 hover:bg-red-700">
               <Plus className="w-4 h-4 mr-2" /> Adicionar
             </Button>
-          </div>
+          </form>
         </CardContent>
       </Card>
 
