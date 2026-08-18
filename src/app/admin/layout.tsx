@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, MapPin, Users, Settings, Newspaper, Calendar, FileText } from "lucide-react";
+import { LayoutDashboard, MapPin, Users, Settings, Newspaper, Calendar, FileText, Image as ImageIcon } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -22,6 +22,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             >
               <LayoutDashboard className="h-5 w-5" />
               <span className="sr-only">Dashboard</span>
+            </Link>
+
+            <Link
+              href="/admin/banners"
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              title="Banners Home"
+            >
+              <ImageIcon className="h-5 w-5" />
+              <span className="sr-only">Banners Home</span>
             </Link>
             
             <Link

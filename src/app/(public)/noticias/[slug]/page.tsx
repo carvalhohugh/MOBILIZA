@@ -5,11 +5,31 @@ import { ArrowLeft, Calendar, User } from "lucide-react";
 
 export const revalidate = 60;
 
-export default async function NoticiaDetalhePage({ params }: { params: { slug: string } }) {
+import { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const { data: article } = await supabase.from('news').select('*').eq('slug', slug).single();
+  
+  if (!article) return { title: 'Notícia não encontrada' };
+
+  return {
+    title: `${article.title} | MOBILIZA 33`,
+    description: article.content?.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...',
+    openGraph: {
+      title: article.title,
+      description: article.content?.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...',
+      images: article.cover_image ? [{ url: article.cover_image }] : [],
+    },
+  };
+}
+
+export default async function NoticiaDetalhePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const { data: article } = await supabase
     .from('news')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!article) {

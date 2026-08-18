@@ -36,13 +36,45 @@ export default function FiliacoesPage() {
     }
   }
 
+  function handleExportCSV() {
+    if (filiations.length === 0) return alert("Nenhum dado para exportar.");
+    
+    const headers = ["Nome", "CPF", "Email", "WhatsApp", "Cidade", "Estado", "Status", "Data Cadastro"];
+    const rows = filiations.map(f => [
+      `"${f.full_name}"`, 
+      `"${f.cpf}"`, 
+      `"${f.email}"`, 
+      `"${f.whatsapp || f.phone}"`, 
+      `"${f.city}"`, 
+      `"${f.state_id}"`, 
+      `"${f.status}"`,
+      `"${new Date(f.created_at).toLocaleDateString('pt-BR')}"`
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `filiados_mobiliza_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Gestão de Filiações (Usuários)</h1>
-        <p className="text-muted-foreground mt-2">
-          Aprove, rejeite ou suspenda membros do partido que solicitaram filiação pelo site.
-        </p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Gestão de Filiações (Usuários)</h1>
+          <p className="text-muted-foreground mt-2">
+            Aprove, rejeite ou suspenda membros do partido que solicitaram filiação pelo site.
+          </p>
+        </div>
+        <div className="mt-4 md:mt-0">
+          <Button onClick={handleExportCSV} className="bg-green-600 hover:bg-green-700">
+            Baixar Relatório CSV
+          </Button>
+        </div>
       </div>
 
       <Card>

@@ -1,42 +1,52 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { Calendar, User } from "lucide-react";
 
-// Força revalidação (ou seja, Home será dinâmica caso tenha notícias novas)
 export const revalidate = 60; 
 
 export default async function Home() {
-  // Buscar últimas 3 notícias
-  const { data: news } = await supabase
-    .from('news')
-    .select('*')
-    .eq('status', 'PUBLICADO')
-    .order('published_at', { ascending: false })
-    .limit(3);
+  const [newsRes, bannersRes] = await Promise.all([
+    supabase.from('news').select('*').eq('status', 'PUBLICADO').order('published_at', { ascending: false }).limit(3),
+    supabase.from('banners').select('*').eq('is_active', true).order('order_index', { ascending: true })
+  ]);
+
+  const news = newsRes.data || [];
+  const banners = bannersRes.data || [];
+  
+  // Default fallback banner if none are registered
+  const mainBanner = banners.length > 0 ? banners[0] : {
+    image_url: "https://images.unsplash.com/photo-1575320295849-0fbfb1c97f1f?q=80&w=2000&auto=format&fit=crop",
+    title: "O BRASIL EM MOVIMENTO",
+    subtitle: "Conheça as diretrizes, a força de nossos representantes e o compromisso do MOBILIZA 33 com o futuro da nação.",
+    link_url: "/filie-se"
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* HERO SECTION / DESTAQUE PRINCIPAL */}
       <section className="relative w-full h-[80vh] bg-neutral-900 flex items-center overflow-hidden">
-        {/* Banner VIVO */}
         <div 
-          className="absolute inset-0 z-0 opacity-60 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1575320295849-0fbfb1c97f1f?q=80&w=2000&auto=format&fit=crop')" }} 
+          className="absolute inset-0 z-0 opacity-60 bg-cover bg-center transition-all duration-1000"
+          style={{ backgroundImage: `url('${mainBanner.image_url}')` }} 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/60 to-transparent z-0" />
         <div className="absolute inset-0 bg-gradient-to-r from-red-900/40 to-transparent z-0" />
         
         <div className="container relative z-10 text-white space-y-6">
           <span className="bg-red-600 text-white text-sm font-bold uppercase px-3 py-1 rounded inline-block shadow-lg border border-red-500">Destaque</span>
+          
           <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter max-w-4xl leading-[0.9] text-white drop-shadow-2xl">
-            O BRASIL <br/>EM <span className="text-red-500">MOVIMENTO</span>
+            {mainBanner.title}
           </h1>
+          
           <p className="text-xl md:text-3xl text-neutral-200 max-w-2xl font-medium drop-shadow-md">
-            Conheça as diretrizes, a força de nossos representantes e o compromisso do MOBILIZA 33 com o futuro da nação.
+            {mainBanner.subtitle}
           </p>
+          
           <div className="pt-8 flex flex-col sm:flex-row gap-6">
             <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white px-10 py-8 text-xl font-black uppercase rounded-full shadow-2xl border-4 border-red-500/30" asChild>
-              <Link href="/filie-se">Filie-se Agora</Link>
+              <Link href={mainBanner.link_url || "/filie-se"}>Saiba Mais</Link>
             </Button>
             <Button size="lg" className="px-10 py-8 text-xl font-bold uppercase text-white bg-transparent border-2 border-white hover:bg-white hover:text-red-600 rounded-full backdrop-blur-sm transition-all" asChild>
               <Link href="/institucional">Nosso Manifesto</Link>

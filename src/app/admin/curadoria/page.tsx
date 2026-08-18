@@ -74,7 +74,7 @@ export default function CuradoriaPage() {
   const handlePublish = async (post: any) => {
     setPublishingId(post.link);
     try {
-      const slug = post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const slug = post.title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       const contentWithCredit = `${post.content}<br><br><p><em>Fonte: <a href="${post.link}" target="_blank" rel="nofollow">${post.source}</a></em></p>`;
 
       const { error } = await supabase.from('news').insert([{
@@ -108,7 +108,7 @@ export default function CuradoriaPage() {
   const handleRewritePublish = async () => {
     setPublishingId("editing");
     try {
-      const slug = editTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const slug = editTitle.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       const contentWithCredit = `${editContent}<br><br><p><em>Adaptação via Curadoria. Fonte original: <a href="${editingPost.link}" target="_blank" rel="nofollow">${editingPost.source}</a></em></p>`;
 
       const { error } = await supabase.from('news').insert([{

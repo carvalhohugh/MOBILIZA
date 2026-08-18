@@ -35,7 +35,7 @@ export default function NoticiasPage() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    const slug = title.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, '');
+    const slug = title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     
     const { error } = await supabase.from('news').insert([
       { title, slug, content, cover_image: coverImage, author }
