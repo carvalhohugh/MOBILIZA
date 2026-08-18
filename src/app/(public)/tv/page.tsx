@@ -19,16 +19,7 @@ export default async function MobilizaTVPage() {
     .order('created_at', { ascending: false });
 
   return (
-    <div className="min-h-[80vh] bg-neutral-900 text-white flex flex-col items-center">
-      <div className="w-full bg-red-600 p-8 text-center border-b-4 border-yellow-400">
-        <h1 className="text-4xl md:text-5xl font-extrabold uppercase tracking-tight">
-          MOBILIZA TV
-        </h1>
-        <p className="text-red-100 text-lg mt-2">
-          Acompanhe ao vivo nossas coberturas, sessões e pronunciamentos oficiais.
-        </p>
-      </div>
-      
+    <div className="min-h-screen bg-[#141414] text-white flex flex-col items-center">
       <MobilizaTVClient initialSrcUrl={srcUrl} extraVideos={extraVideos || []} />
     </div>
   );

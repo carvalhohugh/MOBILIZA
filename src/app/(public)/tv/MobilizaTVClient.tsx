@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PlaySquare } from "lucide-react";
+import { Play, Info, Volume2, VolumeX } from "lucide-react";
 
 interface Video {
   id: string;
@@ -19,56 +19,96 @@ export function MobilizaTVClient({
   const [currentSrc, setCurrentSrc] = useState(initialSrcUrl);
 
   const handleVideoClick = (youtubeId: string) => {
-    setCurrentSrc(`https://www.youtube.com/embed/${youtubeId}?autoplay=1`);
+    setCurrentSrc(`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <div className="container py-12 flex flex-col items-center w-full max-w-5xl">
-      <div className="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border-4 border-neutral-800">
-        <iframe 
-          width="100%" 
-          height="100%" 
-          src={currentSrc} 
-          title="MOBILIZA TV - Transmissão Oficial" 
-          frameBorder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerPolicy="strict-origin-when-cross-origin" 
-          allowFullScreen>
-        </iframe>
-      </div>
-      <p className="text-neutral-400 mt-6 text-center max-w-2xl">
-        Os vídeos reproduzidos nesta página são gerenciados pelo painel de configurações oficial do MOBILIZA 33, puxando de nossos canais verificados no YouTube.
-      </p>
+    <div className="w-full flex flex-col pb-20">
+      
+      {/* HERO / DESTAQUE (Netflix Style) */}
+      <div className="relative w-full h-[60vh] md:h-[80vh] bg-black">
+        {/* Iframe for Hero Video */}
+        <div className="absolute inset-0 w-full h-full pointer-events-auto">
+          <iframe 
+            className="w-full h-full object-cover"
+            src={`${currentSrc}${currentSrc.includes('?') ? '&' : '?'}controls=1&autoplay=1&mute=0&rel=0`} 
+            title="MOBILIZA TV" 
+            frameBorder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerPolicy="strict-origin-when-cross-origin" 
+            allowFullScreen
+          />
+        </div>
 
+        {/* Gradientes Netflix - Fade to black at the bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#141414]/80 via-transparent to-transparent pointer-events-none" />
+
+        {/* Informações sobrepostas (Opcional, caso queiramos botões por cima) */}
+        <div className="absolute bottom-[10%] left-[4%] md:left-[5%] z-10 w-full max-w-2xl pointer-events-none">
+          <h1 className="text-4xl md:text-6xl font-black text-white drop-shadow-lg uppercase tracking-tight leading-tight mb-4">
+            Mobiliza TV
+          </h1>
+          <p className="text-white/80 text-lg md:text-xl drop-shadow-md font-medium max-w-xl mb-6 line-clamp-3">
+            Acompanhe nossas transmissões, sessões ao vivo e todos os pronunciamentos oficiais diretamente do seu dispositivo. O Brasil em movimento.
+          </p>
+        </div>
+      </div>
+
+      {/* CARROSSEL DE VÍDEOS (Estilo Netflix) */}
       {extraVideos.length > 0 && (
-        <div className="w-full mt-16">
-          <h2 className="text-2xl font-bold uppercase border-b border-neutral-800 pb-2 mb-6">Mais Vídeos</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {extraVideos.map(video => (
+        <div className="w-full -mt-16 md:-mt-32 relative z-20 px-[4%] md:px-[5%]">
+          <h2 className="text-2xl font-bold text-white mb-4 drop-shadow-md">Últimos Lançamentos</h2>
+          
+          <div className="flex gap-4 overflow-x-auto pb-8 pt-2 hide-scrollbar snap-x scroll-smooth">
+            {extraVideos.map((video) => (
               <div 
                 key={video.id} 
-                className="group cursor-pointer flex flex-col gap-2"
                 onClick={() => handleVideoClick(video.youtube_id)}
+                className="group relative flex-none w-[280px] md:w-[320px] aspect-video rounded-md bg-zinc-800 overflow-hidden cursor-pointer snap-start transition-all duration-300 hover:scale-105 hover:z-30 shadow-lg"
               >
-                <div className="aspect-video bg-neutral-800 rounded-lg overflow-hidden relative flex items-center justify-center">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src={`https://img.youtube.com/vi/${video.youtube_id}/mqdefault.jpg`} 
-                    alt={video.title}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                  <PlaySquare className="w-10 h-10 text-white opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all z-10 drop-shadow-md" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={`https://img.youtube.com/vi/${video.youtube_id}/mqdefault.jpg`} 
+                  alt={video.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+                />
+                
+                {/* Overlay on Hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <button className="bg-white text-black rounded-full p-2 hover:bg-neutral-300 transition">
+                      <Play className="w-4 h-4 fill-black" />
+                    </button>
+                    <button className="border-2 border-white/50 rounded-full p-2 hover:border-white transition">
+                      <Info className="w-4 h-4 text-white" />
+                    </button>
+                  </div>
+                  <h3 className="font-bold text-white text-sm line-clamp-2 leading-tight">
+                    {video.title}
+                  </h3>
+                  <div className="flex items-center gap-2 mt-2 text-xs font-semibold">
+                    <span className="text-green-500">Relevante</span>
+                    <span className="border border-neutral-500 text-neutral-300 px-1 rounded">Livre</span>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-neutral-200 group-hover:text-red-400 transition-colors line-clamp-2">
-                  {video.title}
-                </h3>
               </div>
             ))}
           </div>
         </div>
       )}
+
+      {/* Adiciona estilo para esconder o scrollbar nativo mas manter a funcionalidade */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
     </div>
   );
 }
