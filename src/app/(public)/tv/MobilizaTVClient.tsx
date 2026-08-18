@@ -16,14 +16,7 @@ export function MobilizaTVClient({
   initialSrcUrl: string; 
   extraVideos: Video[];
 }) {
-  // Se o usuário ainda não cadastrou vídeos no banco, usar vídeos fictícios do canal para preencher
-  const displayVideos = extraVideos.length > 0 ? extraVideos : [
-    { id: '1', title: 'O Futuro do Brasil em Nossas Mãos', youtube_id: 'UUz0i9BsZhhxGuPAUjQ77XCw' },
-    { id: '2', title: 'Nossas Diretrizes e Valores', youtube_id: 'dQw4w9WgXcQ' },
-    { id: '3', title: 'Convenção Nacional 2026', youtube_id: 'jNQXAC9IVRw' },
-    { id: '4', title: 'Entrevista Exclusiva', youtube_id: '9bZkp7q19f0' },
-    { id: '5', title: 'A Força do Povo', youtube_id: 'V-_O7nl0Ii0' }
-  ];
+  const displayVideos = extraVideos.length > 0 ? extraVideos : [];
 
   const [currentSrc, setCurrentSrc] = useState(initialSrcUrl);
 
