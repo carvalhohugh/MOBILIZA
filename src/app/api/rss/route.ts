@@ -26,7 +26,15 @@ export async function GET(request: Request) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
       }
     });
-    const xml = await response.text();
+    let xml = await response.text();
+    
+    // Sanitize XML (remove BOM, leading whitespace, or invisible chars before <?xml)
+    xml = xml.replace(/^\uFEFF/gm, "").trim();
+    const startIndex = xml.indexOf('<');
+    if (startIndex > 0) {
+      xml = xml.substring(startIndex);
+    }
+
     const feed = await parser.parseString(xml);
     
     // Normalizar as postagens para garantir que tenham imagem e resumo
