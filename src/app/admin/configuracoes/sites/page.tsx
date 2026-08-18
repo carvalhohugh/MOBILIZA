@@ -29,7 +29,19 @@ export default function SitesConfiaveisPage() {
     if (e) e.preventDefault();
     if (!newName || !newUrl) return;
     
-    const { error } = await supabase.from("trusted_sources").insert([{ name: newName, rss_url: newUrl, status: 'ATIVO' }]);
+    // Auto-discover the real RSS URL if the user typed a standard website
+    let finalUrl = newUrl;
+    try {
+      const res = await fetch(`/api/discover?url=${encodeURIComponent(newUrl)}`);
+      const data = await res.json();
+      if (data.rssUrl) {
+        finalUrl = data.rssUrl;
+      }
+    } catch (err) {
+      console.error("Discovery failed, using provided url", err);
+    }
+
+    const { error } = await supabase.from("trusted_sources").insert([{ name: newName, rss_url: finalUrl, status: 'ATIVO' }]);
     
     if (error) {
       alert("Erro ao salvar: " + error.message);
@@ -61,7 +73,7 @@ export default function SitesConfiaveisPage() {
       <Card>
         <CardHeader>
           <CardTitle>Adicionar Novo Site</CardTitle>
-          <CardDescription>Insira o nome do portal e o link para o RSS Feed (.xml ou /feed)</CardDescription>
+          <CardDescription>Insira o nome do portal e o link. O sistema tentará descobrir o Feed RSS automaticamente para você!</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleAdd} className="flex flex-col md:flex-row gap-4 items-end">
@@ -70,8 +82,8 @@ export default function SitesConfiaveisPage() {
               <Input placeholder="Ex: G1 Política" value={newName} onChange={e => setNewName(e.target.value)} required />
             </div>
             <div className="space-y-2 flex-[2]">
-              <label className="text-sm font-medium">URL do RSS</label>
-              <Input placeholder="Ex: https://g1.globo.com/rss/g1/politica/" value={newUrl} onChange={e => setNewUrl(e.target.value)} type="url" required />
+              <label className="text-sm font-medium">Link do Site ou URL do RSS</label>
+              <Input placeholder="Ex: https://g1.globo.com/politica/" value={newUrl} onChange={e => setNewUrl(e.target.value)} type="url" required />
             </div>
             <Button type="submit" className="bg-red-600 hover:bg-red-700">
               <Plus className="w-4 h-4 mr-2" /> Adicionar
