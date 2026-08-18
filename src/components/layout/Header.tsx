@@ -46,7 +46,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Link href="/admin" className="text-sm font-semibold hover:text-red-600 flex items-center gap-2 uppercase tracking-wide">
+          <Link href="/login" className="text-sm font-semibold hover:text-red-600 flex items-center gap-2 uppercase tracking-wide">
             Área Restrita
           </Link>
           <Button size="lg" className="bg-red-600 hover:bg-neutral-900 text-white font-extrabold rounded-full px-6 py-6 flex items-center justify-center gap-2 shadow-xl border-4 border-transparent hover:border-red-600 transition-all uppercase tracking-wide" asChild>
