@@ -13,8 +13,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xbvjrdvlugsggnrfufai.supabase.co'
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_PhkVq6D16maTviY6xlwfBQ_r86HM9QW'
   
   const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey)
 
@@ -61,13 +61,12 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="w-full space-y-4">
           <div className="space-y-1">
-            <label className="text-sm font-bold text-neutral-500 uppercase">E-mail</label>
+            <label className="text-sm font-bold text-neutral-500 uppercase">Usuário</label>
             <input 
-              type="email" 
+              type="text" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border border-neutral-300 rounded-md p-3 outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
-              placeholder="admin@admin.com"
               required
             />
           </div>
@@ -79,7 +78,6 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border border-neutral-300 rounded-md p-3 outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
-              placeholder="••••••••"
               required
             />
           </div>

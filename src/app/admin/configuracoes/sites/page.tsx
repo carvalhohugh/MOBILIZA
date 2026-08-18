@@ -25,10 +25,11 @@ export default function SitesConfiaveisPage() {
     loadSites();
   }, []);
 
-  const handleAdd = async () => {
+  const handleAdd = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!newName || !newUrl) return;
     
-    const { error } = await supabase.from("trusted_sources").insert([{ name: newName, rss_url: newUrl }]);
+    const { error } = await supabase.from("trusted_sources").insert([{ name: newName, rss_url: newUrl, status: 'ATIVO' }]);
     
     if (error) {
       alert("Erro ao salvar: " + error.message);
@@ -63,19 +64,19 @@ export default function SitesConfiaveisPage() {
           <CardDescription>Insira o nome do portal e o link para o RSS Feed (.xml ou /feed)</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 items-end">
+          <form onSubmit={handleAdd} className="flex flex-col md:flex-row gap-4 items-end">
             <div className="space-y-2 flex-1">
               <label className="text-sm font-medium">Nome do Site</label>
-              <Input placeholder="Ex: G1 Política" value={newName} onChange={e => setNewName(e.target.value)} />
+              <Input placeholder="Ex: G1 Política" value={newName} onChange={e => setNewName(e.target.value)} required />
             </div>
             <div className="space-y-2 flex-[2]">
               <label className="text-sm font-medium">URL do RSS</label>
-              <Input placeholder="Ex: https://g1.globo.com/rss/g1/politica/" value={newUrl} onChange={e => setNewUrl(e.target.value)} />
+              <Input placeholder="Ex: https://g1.globo.com/rss/g1/politica/" value={newUrl} onChange={e => setNewUrl(e.target.value)} type="url" required />
             </div>
-            <Button onClick={handleAdd} className="bg-red-600 hover:bg-red-700">
+            <Button type="submit" className="bg-red-600 hover:bg-red-700">
               <Plus className="w-4 h-4 mr-2" /> Adicionar
             </Button>
-          </div>
+          </form>
         </CardContent>
       </Card>
 
