@@ -1,7 +1,7 @@
 import { MobilizaTVClient } from "./MobilizaTVClient";
 
-// Canal oficial do Mobiliza 33 no YouTube
-const MOBILIZA_CHANNEL_ID = 'UCkcuoXnRQR7hLEiT95I7Jpg';
+// Canal oficial do PMN - Partido da Mobilização Nacional
+const MOBILIZA_CHANNEL_ID = 'UCuuIPv7aRRC3iPZRu24BsxQ';
 
 export const revalidate = 3600;
 
