@@ -37,10 +37,12 @@ export default function InteligenciaPage() {
   const [region, setRegion] = useState("SP");
   const [generating, setGenerating] = useState(false);
   const [insights, setInsights] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerateInsights = async () => {
     setGenerating(true);
     setInsights(null);
+    setError(null);
     
     const estadoSelecionado = ESTADOS.find(e => e.id === region)?.nome || "Geral";
     const prompt = `Você é um Consultor Político Estrategista do partido MOBILIZA 33.
@@ -64,11 +66,11 @@ Seja conciso, profissional e persuasivo. Não use blocos de código (markdown de
       if (res.ok && data.text) {
         setInsights(data.text);
       } else {
-        alert(data.error || "Erro ao conectar com a Inteligência Artificial.");
+        setError(data.error || "Erro ao conectar com a Inteligência Artificial.");
       }
     } catch (err) {
       console.error(err);
-      alert("Falha de conexão com a API de IA.");
+      setError("Falha de conexão com a API de IA. Verifique sua conexão e tente novamente.");
     } finally {
       setGenerating(false);
     }
@@ -160,12 +162,22 @@ Seja conciso, profissional e persuasivo. Não use blocos de código (markdown de
         </CardHeader>
         <CardContent>
           {!insights ? (
-            <div className="text-center py-8">
+            <div className="text-center py-8 flex flex-col items-center gap-4">
+              {error && (
+                <div className="w-full max-w-xl bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm text-left flex items-start gap-3">
+                  <span className="text-xl">⚠️</span>
+                  <div>
+                    <p className="font-bold">Falha na Geração</p>
+                    <p>{error}</p>
+                    <p className="text-xs mt-1 text-red-500">Isso geralmente é temporário. Aguarde alguns segundos e tente novamente.</p>
+                  </div>
+                </div>
+              )}
               <Button size="lg" className="bg-red-600 hover:bg-red-700 font-bold" onClick={handleGenerateInsights} disabled={generating}>
                 {generating ? (
                   <span className="flex items-center gap-2"><RefreshCw className="w-5 h-5 animate-spin" /> Processando na Nuvem...</span>
                 ) : (
-                  <span className="flex items-center gap-2"><Sparkles className="w-5 h-5" /> Analisar Cenário em Tempo Real</span>
+                  <span className="flex items-center gap-2"><Sparkles className="w-5 h-5" /> {error ? 'Tentar Novamente' : 'Analisar Cenário em Tempo Real'}</span>
                 )}
               </Button>
             </div>
