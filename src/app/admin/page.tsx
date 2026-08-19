@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { ChevronRight, X } from "lucide-react";
+import { ChevronRight, X, Edit, Ban, Lock, Trash2 } from "lucide-react";
 
 export default function AdminDashboard() {
   const [data, setData] = useState({ filiations: [] as any[], news: [] as any[], directories: [] as any[], sources: [] as any[] });
@@ -113,12 +113,20 @@ export default function AdminDashboard() {
                 <div className="space-y-4">
                   {data.filiations.map((item: any) => (
                     <div key={item.id} className="p-4 border rounded-lg flex justify-between items-center hover:bg-neutral-50 transition-colors">
-                      <div>
+                      <div className="flex-1">
                         <p className="font-bold">{item.full_name}</p>
                         <p className="text-sm text-neutral-600">CPF: {item.cpf} | {item.city} - {item.state_id}</p>
                         <p className="text-xs text-neutral-500">{new Date(item.created_at).toLocaleDateString()}</p>
                       </div>
-                      <span className={`px-2 py-1 text-xs font-bold rounded-full ${item.status === 'APROVADO' ? 'bg-green-100 text-green-800' : item.status === 'REJEITADO' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>{item.status}</span>
+                      <div className="flex flex-col items-end gap-2">
+                        <span className={`px-2 py-1 text-xs font-bold rounded-full ${item.status === 'APROVADO' ? 'bg-green-100 text-green-800' : item.status === 'REJEITADO' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>{item.status}</span>
+                        <div className="flex gap-1 mt-2">
+                          <button onClick={() => alert('Editar ' + item.full_name)} className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-md" title="Editar"><Edit className="w-4 h-4" /></button>
+                          <button onClick={() => alert('Suspender ' + item.full_name)} className="p-1.5 text-orange-600 hover:bg-orange-100 rounded-md" title="Suspender"><Ban className="w-4 h-4" /></button>
+                          <button onClick={() => alert('Bloquear ' + item.full_name)} className="p-1.5 text-neutral-600 hover:bg-neutral-100 rounded-md" title="Bloquear"><Lock className="w-4 h-4" /></button>
+                          <button onClick={() => alert('Excluir ' + item.full_name)} className="p-1.5 text-red-600 hover:bg-red-100 rounded-md" title="Excluir"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      </div>
                     </div>
                   ))}
                   {data.filiations.length === 0 && <p className="text-neutral-500">Nenhum registro.</p>}
@@ -127,10 +135,18 @@ export default function AdminDashboard() {
               {modalType === 'news' && (
                 <div className="space-y-4">
                   {data.news.map((item: any) => (
-                    <div key={item.id} className="p-4 border rounded-lg hover:bg-neutral-50 transition-colors">
-                      <p className="font-bold">{item.title}</p>
-                      <p className="text-sm text-neutral-600">Autor: {item.author || 'N/A'}</p>
-                      <p className="text-xs text-neutral-500">{new Date(item.created_at).toLocaleDateString()}</p>
+                    <div key={item.id} className="p-4 border rounded-lg flex justify-between items-center hover:bg-neutral-50 transition-colors">
+                      <div className="flex-1">
+                        <p className="font-bold">{item.title}</p>
+                        <p className="text-sm text-neutral-600">Autor: {item.author || 'N/A'}</p>
+                        <p className="text-xs text-neutral-500">{new Date(item.created_at).toLocaleDateString()}</p>
+                      </div>
+                      <div className="flex gap-1">
+                        <button onClick={() => alert('Editar ' + item.title)} className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-md" title="Editar"><Edit className="w-4 h-4" /></button>
+                        <button onClick={() => alert('Suspender ' + item.title)} className="p-1.5 text-orange-600 hover:bg-orange-100 rounded-md" title="Suspender"><Ban className="w-4 h-4" /></button>
+                        <button onClick={() => alert('Bloquear ' + item.title)} className="p-1.5 text-neutral-600 hover:bg-neutral-100 rounded-md" title="Bloquear"><Lock className="w-4 h-4" /></button>
+                        <button onClick={() => alert('Excluir ' + item.title)} className="p-1.5 text-red-600 hover:bg-red-100 rounded-md" title="Excluir"><Trash2 className="w-4 h-4" /></button>
+                      </div>
                     </div>
                   ))}
                   {data.news.length === 0 && <p className="text-neutral-500">Nenhum registro.</p>}
@@ -139,10 +155,18 @@ export default function AdminDashboard() {
               {modalType === 'directories' && (
                 <div className="space-y-4">
                   {data.directories.map((item: any) => (
-                    <div key={item.id} className="p-4 border rounded-lg hover:bg-neutral-50 transition-colors">
-                      <p className="font-bold">{item.name}</p>
-                      <p className="text-sm text-neutral-600">{item.city} - {item.state}</p>
-                      <p className="text-xs text-neutral-500">Tipo: {item.type}</p>
+                    <div key={item.id} className="p-4 border rounded-lg flex justify-between items-center hover:bg-neutral-50 transition-colors">
+                      <div className="flex-1">
+                        <p className="font-bold">{item.name}</p>
+                        <p className="text-sm text-neutral-600">{item.city} - {item.state}</p>
+                        <p className="text-xs text-neutral-500">Tipo: {item.type}</p>
+                      </div>
+                      <div className="flex gap-1">
+                        <button onClick={() => alert('Editar ' + item.name)} className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-md" title="Editar"><Edit className="w-4 h-4" /></button>
+                        <button onClick={() => alert('Suspender ' + item.name)} className="p-1.5 text-orange-600 hover:bg-orange-100 rounded-md" title="Suspender"><Ban className="w-4 h-4" /></button>
+                        <button onClick={() => alert('Bloquear ' + item.name)} className="p-1.5 text-neutral-600 hover:bg-neutral-100 rounded-md" title="Bloquear"><Lock className="w-4 h-4" /></button>
+                        <button onClick={() => alert('Excluir ' + item.name)} className="p-1.5 text-red-600 hover:bg-red-100 rounded-md" title="Excluir"><Trash2 className="w-4 h-4" /></button>
+                      </div>
                     </div>
                   ))}
                   {data.directories.length === 0 && <p className="text-neutral-500">Nenhum registro.</p>}
@@ -152,11 +176,17 @@ export default function AdminDashboard() {
                 <div className="space-y-4">
                   {data.sources.map((item: any) => (
                     <div key={item.id} className="p-4 border rounded-lg flex justify-between items-center hover:bg-neutral-50 transition-colors">
-                      <div>
+                      <div className="flex-1">
                         <p className="font-bold">{item.name}</p>
                         <a href={item.url} target="_blank" rel="noreferrer" className="text-sm text-blue-600 hover:underline">{item.url}</a>
                       </div>
-                      <span className={`px-2 py-1 text-xs font-bold rounded-full ${item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{item.status}</span>
+                      <div className="flex flex-col items-end gap-2">
+                        <span className={`px-2 py-1 text-xs font-bold rounded-full ${item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{item.status}</span>
+                        <div className="flex gap-1 mt-2">
+                          <button onClick={() => alert('Editar ' + item.name)} className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-md" title="Editar"><Edit className="w-4 h-4" /></button>
+                          <button onClick={() => alert('Excluir ' + item.name)} className="p-1.5 text-red-600 hover:bg-red-100 rounded-md" title="Excluir"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      </div>
                     </div>
                   ))}
                   {data.sources.length === 0 && <p className="text-neutral-500">Nenhum registro.</p>}
