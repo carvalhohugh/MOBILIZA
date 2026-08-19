@@ -78,7 +78,65 @@ export default async function NoticiaDetalhePage({ params }: { params: Promise<{
           prose-img:rounded-xl prose-img:shadow-sm"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
+        
+        {/* RECOMENDAÇÕES DE OUTRAS NOTÍCIAS */}
+        <div className="mt-20 pt-10 border-t border-neutral-200">
+          <h2 className="text-2xl font-bold mb-6 text-neutral-900">Veja também</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* O componente de servidor vai buscar as notícias extras */}
+            <RelatedNews currentSlug={slug} />
+          </div>
+        </div>
       </div>
     </article>
+  );
+}
+
+// Subcomponente para buscar as notícias recomendadas
+async function RelatedNews({ currentSlug }: { currentSlug: string }) {
+  const { data: related } = await supabase
+    .from('news')
+    .select('id, title, slug, cover_image, created_at')
+    .neq('slug', currentSlug)
+    .order('created_at', { ascending: false })
+    .limit(3);
+
+  if (!related || related.length === 0) {
+    return <p className="text-neutral-500">Nenhuma outra notícia disponível no momento.</p>;
+  }
+
+  return (
+    <>
+      {related.map((news) => (
+        <Link 
+          key={news.id} 
+          href={`/noticias/${news.slug}`}
+          className="group block border border-neutral-200 rounded-xl overflow-hidden hover:border-red-500 hover:shadow-md transition-all bg-white"
+        >
+          {news.cover_image ? (
+            <div className="w-full h-40 bg-neutral-100 relative overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src={news.cover_image} 
+                alt={news.title} 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+              />
+            </div>
+          ) : (
+            <div className="w-full h-40 bg-neutral-100 flex items-center justify-center relative overflow-hidden">
+              <span className="text-neutral-400 font-medium">Sem Imagem</span>
+            </div>
+          )}
+          <div className="p-4">
+            <p className="text-xs text-neutral-500 mb-2 font-medium">
+              {new Date(news.created_at).toLocaleDateString('pt-BR')}
+            </p>
+            <h3 className="font-bold text-neutral-900 group-hover:text-red-600 transition-colors line-clamp-3">
+              {news.title}
+            </h3>
+          </div>
+        </Link>
+      ))}
+    </>
   );
 }

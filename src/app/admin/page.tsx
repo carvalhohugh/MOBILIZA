@@ -137,8 +137,10 @@ export default function AdminDashboard() {
                   {data.news.map((item: any) => (
                     <div key={item.id} className="p-4 border rounded-lg flex justify-between items-center hover:bg-neutral-50 transition-colors">
                       <div className="flex-1">
-                        <p className="font-bold">{item.title}</p>
-                        <p className="text-sm text-neutral-600">Autor: {item.author || 'N/A'}</p>
+                        <a href={`/noticias/${item.slug}`} target="_blank" rel="noreferrer" className="font-bold hover:text-red-600 transition-colors">
+                          {item.title}
+                        </a>
+                        <p className="text-sm text-neutral-600 mt-1">Autor: {item.author || 'N/A'}</p>
                         <p className="text-xs text-neutral-500">{new Date(item.created_at).toLocaleDateString()}</p>
                       </div>
                       <div className="flex gap-1">
